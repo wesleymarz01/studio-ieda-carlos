@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Studio Iêda Carlos — Agende seu horário</title>
+  <meta name="description" content="Studio Iêda Carlos • Cílios e Sobrancelhas em Goiânia. Agende seu horário online." />
+  <meta name="theme-color" content="#f3e4dc" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="img/icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="img/icon-192.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --nude-50: #fbf5f2;
+      --nude-100: #f6ebe5;
+      --nude-200: #eedcd3;
+      --nude-300: #e2c7bb;
+      --rose: #a8706a;
+      --rose-dark: #8a5651;
+      --gold: #b8915c;
+      --gold-soft: #d9bf95;
+      --ink: #2b211e;
+      --ink-soft: #6f5c55;
+      --black: #1b1513;
+      --radius: 22px;
+      --shadow: 0 20px 50px -20px rgba(90, 55, 45, .28);
+      --shadow-sm: 0 8px 22px -12px rgba(90, 55, 45, .3);
+      --serif: 'Cormorant Garamond', Georgia, serif;
+      --sans: 'Jost', system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--sans);
+      font-weight: 400;
+      color: var(--ink);
+      background: var(--nude-100);
+      background-image:
+        radial-gradient(ellipse 80% 50% at 100% 0%, #fdf1ec 0%, transparent 60%),
+        radial-gradient(ellipse 70% 60% at 0% 100%, #ecd6cc 0%, transparent 60%);
+      background-attachment: fixed;
+      min-height: 100vh;
+      line-height: 1.55;
+      padding-bottom: calc(110px + env(safe-area-inset-bottom));
+    }
+
+    img { display: block; max-width: 100%; }
+    button { font-family: inherit; }
+
+    .gold-line {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold) 20%, var(--gold) 80%, transparent);
+      opacity: .7;
+    }
+
+    .eyebrow {
+      font-size: .7rem;
+      letter-spacing: .32em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 500;
+    }
+
+    /* ---------- HERO ---------- */
+    .hero {
+      position: relative;
+      max-width: 1080px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      min-height: 620px;
+      overflow: hidden;
+    }
+
+    .hero-text {
+      position: relative;
+      z-index: 2;
+      padding: 56px 32px 48px 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .logo { width: 92px; height: auto; color: var(--gold); }
+
+    .brand {
+      font-family: var(--sans);
+      font-weight: 400;
+      font-size: 1.05rem;
+      letter-spacing: .34em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-top: 10px;
+    }
+    .brand-sub {
+      font-size: .66rem;
+      letter-spacing: .38em;
+      text-transform: uppercase;
+      color: var(--ink-soft);
+      margin-top: 6px;
+    }
+    .hero-text .gold-line { width: 120px; margin: 22px auto; }
+
+    .hero-kicker {
+      font-size: 1rem;
+      letter-spacing: .28em;
+      text-transform: uppercase;
+      color: var(--ink);
+      font-weight: 400;
+    }
+    .hero-title {
+      font-family: var(--serif);
+      font-style: italic;
+      font-weight: 600;
+      font-size: clamp(3.2rem, 8vw, 5.2rem);
+      line-height: .95;
+      margin: 6px 0 8px;
+      padding: 0 .1em;
+      background: linear-gradient(180deg, #b67d72 0%, #8a5651 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .hero-desc {
+      max-width: 340px;
+      color: var(--ink-soft);
+      font-size: 1.02rem;
+      font-weight: 300;
+    }
+
+    .hero-cta {
+      margin-top: 28px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 15px 34px;
+      border-radius: 999px;
+      border: 1px solid var(--gold-soft);
+      background: linear-gradient(180deg, #b67d72, #9a625b);
+      color: #fff;
+      text-decoration: none;
+      font-size: .78rem;
+      letter-spacing: .26em;
+      text-transform: uppercase;
+      font-weight: 500;
+      box-shadow: 0 0 0 4px rgba(217, 191, 149, .25), var(--shadow-sm);
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+    .hero-cta:hover { transform: translateY(-2px); box-shadow: 0 0 0 6px rgba(217, 191, 149, .3), var(--shadow); }
+
+    .hero-meta {
+      margin-top: 22px;
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+      justify-content: center;
+      font-size: .85rem;
+      color: var(--ink-soft);
+    }
+    .hero-meta span { display: inline-flex; align-items: center; gap: 6px; }
+    .hero-meta svg { width: 16px; height: 16px; color: var(--gold); }
+
+    .hero-photo { position: relative; }
+    .hero-photo img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: 50% 15%;
+    }
+    .hero-photo::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background: linear-gradient(90deg, var(--nude-100) 0%, rgba(246,235,229,0) 28%, rgba(246,235,229,0) 88%, var(--nude-100) 100%),
+                  linear-gradient(0deg, var(--nude-100) 0%, rgba(246,235,229,0) 22%);
+    }
+    .hero-arc {
+      position: absolute;
+      z-index: 3;
+      pointer-events: none;
+      color: var(--gold);
+      opacity: .75;
+    }
+    .hero-arc.top { top: -10px; right: -20px; width: 360px; }
+    .hero-arc.bottom { bottom: -10px; left: -30px; width: 300px; transform: rotate(180deg); }
+
+    .signature {
+      position: absolute;
+      z-index: 2;
+      right: 24px;
+      bottom: 28px;
+      text-align: right;
+      color: var(--ink);
+    }
+    .signature strong {
+      display: block;
+      font-family: var(--serif);
+      font-style: italic;
+      font-weight: 500;
+      font-size: 1.7rem;
+      line-height: 1;
+    }
+    .signature small {
+      font-size: .64rem;
+      letter-spacing: .3em;
+      text-transform: uppercase;
+      color: var(--rose-dark);
+    }
+
+    .mobile-brand {
+      display: none;
+      position: absolute;
+      z-index: 3;
+      top: calc(18px + env(safe-area-inset-top));
+      left: 18px;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 14px 8px 8px;
+      border-radius: 999px;
+      background: rgba(251, 245, 242, .78);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(217, 191, 149, .5);
+    }
+    .mobile-brand .logo { width: 34px; height: 30px; }
+    .mobile-brand div { line-height: 1.1; }
+    .mobile-brand b { font-weight: 500; font-size: .68rem; letter-spacing: .22em; text-transform: uppercase; color: var(--gold); display: block; }
+    .mobile-brand i { font-style: normal; font-size: .56rem; letter-spacing: .24em; text-transform: uppercase; color: var(--ink-soft); }
+
+    @media (max-width: 820px) {
+      .hero { grid-template-columns: 1fr; min-height: 0; }
+      .hero-photo { order: -1; height: 72vh; max-height: 600px; min-height: 420px; }
+      .hero-photo img { object-position: 50% 0%; }
+      .hero-photo::before { background: linear-gradient(0deg, var(--nude-100) 2%, rgba(246,235,229,.85) 14%, rgba(246,235,229,0) 32%); }
+      .hero-text { padding: 0 20px 36px; margin-top: -84px; }
+      .hero-text .logo-block, .hero-text .gold-line.first, .signature { display: none; }
+      .mobile-brand { display: flex; }
+      .hero-arc.top { width: 240px; }
+      .hero-arc.bottom { display: none; }
+    }
+
+    /* ---------- SECTIONS ---------- */
+    main { max-width: 760px; margin: 0 auto; padding: 0 16px; }
+
+    .section { margin-top: 44px; scroll-margin-top: 20px; }
+    .section-head { text-align: center; margin-bottom: 22px; }
+    .section-head h2 {
+      font-family: var(--serif);
+      font-weight: 500;
+      font-size: 2.1rem;
+      line-height: 1.1;
+      margin-top: 6px;
+    }
+    .section-head h2 em { color: var(--rose); font-weight: 600; }
+    .section-head p { color: var(--ink-soft); font-weight: 300; margin-top: 6px; font-size: .98rem; }
+
+    .step-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      border: 1px solid var(--gold);
+      font-family: var(--serif);
+      font-size: 1rem;
+      color: var(--gold);
+      margin-bottom: 6px;
+    }
+
+    .panel {
+      background: rgba(251, 245, 242, .82);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(217, 191, 149, .45);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 22px;
+    }
+
+    /* Services */
+    .services { display: grid; gap: 12px; }
+    .service {
+      display: grid;
+      grid-template-columns: 56px 1fr auto;
+      align-items: center;
+      gap: 14px;
+      width: 100%;
+      text-align: left;
+      padding: 16px;
+      border-radius: 18px;
+      border: 1px solid var(--nude-300);
+      background: #fffaf8;
+      cursor: pointer;
+      color: var(--ink);
+      transition: border-color .2s, transform .2s, box-shadow .2s, background .2s;
+    }
+    .service:hover { transform: translateY(-1px); border-color: var(--gold-soft); }
+    .service.selected {
+      border-color: var(--rose);
+      background: linear-gradient(135deg, #fff 0%, #fbeee9 100%);
+      box-shadow: 0 0 0 3px rgba(168, 112, 106, .14), var(--shadow-sm);
+    }
+    .service-icon {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      background: var(--nude-100);
+      border: 1px solid var(--gold-soft);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--rose-dark);
+    }
+    .service.selected .service-icon { background: var(--rose); color: #fff; border-color: var(--rose); }
+    .service-icon svg { width: 30px; height: 30px; }
+    .service-name { font-family: var(--serif); font-size: 1.32rem; font-weight: 600; line-height: 1.1; }
+    .service-meta { font-size: .82rem; color: var(--ink-soft); font-weight: 300; margin-top: 3px; }
+    .service-price { text-align: right; font-family: var(--serif); font-size: 1.45rem; font-weight: 600; color: var(--rose-dark); white-space: nowrap; }
+    @media (max-width: 400px) {
+      .service { grid-template-columns: 46px 1fr auto; gap: 10px; padding: 14px 12px; }
+      .service-icon { width: 46px; height: 46px; }
+      .service-name { font-size: 1.15rem; }
+      .service-price { font-size: 1.25rem; }
+    }
+
+    /* Calendar strip */
+    .month-label { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .month-label h3 { font-family: var(--serif); font-style: italic; font-weight: 500; font-size: 1.4rem; }
+    .nav-btns { display: flex; gap: 8px; }
+    .nav-btn {
+      width: 36px; height: 36px; border-radius: 50%;
+      border: 1px solid var(--nude-300); background: #fff; color: var(--ink);
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+    }
+    .nav-btn svg { width: 16px; height: 16px; }
+
+    .days {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      padding: 4px 2px 10px;
+      scrollbar-width: none;
+    }
+    .days::-webkit-scrollbar { display: none; }
+    .day {
+      flex: 0 0 62px;
+      scroll-snap-align: start;
+      border-radius: 16px;
+      border: 1px solid var(--nude-300);
+      background: #fff;
+      padding: 10px 0 12px;
+      text-align: center;
+      cursor: pointer;
+      color: var(--ink);
+      transition: all .2s;
+    }
+    .day span { display: block; font-size: .66rem; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-soft); }
+    .day b { display: block; font-family: var(--serif); font-size: 1.6rem; font-weight: 600; line-height: 1.15; }
+    .day i { display: block; font-style: normal; font-size: .62rem; color: var(--gold); min-height: 1em; }
+    .day.selected { background: var(--black); border-color: var(--black); color: #fff; box-shadow: var(--shadow-sm); }
+    .day.selected span, .day.selected i { color: var(--gold-soft); }
+    .day:disabled { opacity: .38; cursor: not-allowed; background: transparent; }
+
+    .slots-title { font-size: .72rem; letter-spacing: .24em; text-transform: uppercase; color: var(--ink-soft); margin: 18px 0 10px; }
+    .slots { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 8px; }
+    .slot {
+      padding: 12px 6px;
+      border-radius: 14px;
+      border: 1px solid var(--nude-300);
+      background: #fff;
+      font-size: .98rem;
+      font-weight: 500;
+      color: var(--ink);
+      cursor: pointer;
+      transition: all .15s;
+    }
+    .slot:hover:not(:disabled) { border-color: var(--rose); }
+    .slot.selected { background: var(--rose); border-color: var(--rose); color: #fff; }
+    .slot:disabled { opacity: .38; cursor: not-allowed; text-decoration: line-through; }
+    .empty-note { grid-column: 1 / -1; text-align: center; color: var(--ink-soft); font-weight: 300; padding: 12px; font-style: italic; }
+
+    /* Form */
+    .field { margin-bottom: 14px; }
+    .field label { display: block; font-size: .72rem; letter-spacing: .2em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 6px; }
+    .field input, .field textarea {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 14px;
+      border: 1px solid var(--nude-300);
+      background: #fff;
+      font-family: inherit;
+      font-size: 1rem;
+      color: var(--ink);
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .field textarea { resize: vertical; min-height: 76px; }
+    .field input:focus, .field textarea:focus { border-color: var(--rose); box-shadow: 0 0 0 3px rgba(168, 112, 106, .14); }
+    .fields-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media (max-width: 560px) { .fields-2 { grid-template-columns: 1fr; gap: 0; } }
+
+    /* About */
+    .about { display: grid; grid-template-columns: 200px 1fr; gap: 24px; align-items: center; }
+    .about-photo {
+      position: relative;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      padding: 5px;
+      background: conic-gradient(from 200deg, var(--gold-soft), var(--gold), var(--gold-soft), #f3e3cf, var(--gold-soft));
+    }
+    .about-photo img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; border: 4px solid var(--nude-50); }
+    .about h3 { font-family: var(--serif); font-size: 1.9rem; font-weight: 500; line-height: 1.1; margin-top: 4px; }
+    .about h3 em { color: var(--rose); }
+    .about p { color: var(--ink-soft); font-weight: 300; margin-top: 10px; }
+    .quote { margin-top: 14px; font-family: var(--serif); font-style: italic; font-size: 1.2rem; color: var(--rose-dark); }
+    @media (max-width: 600px) {
+      .about { grid-template-columns: 1fr; text-align: center; }
+      .about-photo { width: 170px; margin: 0 auto; }
+    }
+
+    .gallery { display: grid; grid-template-columns: 1.2fr 1fr; gap: 12px; margin-top: 12px; }
+    .gallery figure { position: relative; border-radius: 18px; overflow: hidden; box-shadow: var(--shadow-sm); }
+    .gallery img { width: 100%; height: 100%; object-fit: cover; aspect-ratio: 4/5; }
+    .gallery figcaption {
+      position: absolute; left: 12px; bottom: 12px;
+      padding: 6px 12px; border-radius: 999px;
+      background: rgba(251,245,242,.85); backdrop-filter: blur(6px);
+      font-size: .64rem; letter-spacing: .2em; text-transform: uppercase; color: var(--ink);
+    }
+    .gallery-card {
+      border-radius: 18px;
+      background: var(--black);
+      color: #fff;
+      padding: 22px;
+      display: flex; flex-direction: column; justify-content: space-between;
+      background-image: radial-gradient(circle at 100% 0%, rgba(184,145,92,.35), transparent 60%);
+    }
+    .gallery-card .eyebrow { color: var(--gold-soft); }
+    .gallery-card ul { list-style: none; margin-top: 12px; }
+    .gallery-card li { padding: 9px 0; border-bottom: 1px solid rgba(217,191,149,.2); font-weight: 300; font-size: .94rem; display: flex; gap: 10px; align-items: center; }
+    .gallery-card li:last-child { border: 0; }
+    .gallery-card li::before { content: "♡"; color: var(--gold-soft); font-size: .8rem; }
+    .gallery-card a { color: var(--gold-soft); font-size: .76rem; letter-spacing: .14em; text-transform: uppercase; text-decoration: none; margin-top: 12px; }
+    @media (max-width: 480px) { .gallery { grid-template-columns: 1fr; } .gallery img { aspect-ratio: 1; } }
+
+    /* My bookings */
+    .bookings-list { display: grid; gap: 10px; }
+    .booking {
+      display: flex; justify-content: space-between; align-items: center; gap: 12px;
+      padding: 14px 16px; border-radius: 16px; background: #fff; border: 1px solid var(--nude-200);
+    }
+    .booking b { font-family: var(--serif); font-size: 1.15rem; font-weight: 600; display: block; }
+    .booking span { font-size: .85rem; color: var(--ink-soft); }
+    .booking button {
+      border: 1px solid var(--nude-300); background: transparent; border-radius: 999px;
+      padding: 7px 14px; font-size: .74rem; color: var(--rose-dark); cursor: pointer; white-space: nowrap;
+    }
+
+    /* Footer */
+    footer { max-width: 760px; margin: 56px auto 0; padding: 0 16px; text-align: center; }
+    footer .logo { width: 64px; height: 54px; margin: 0 auto 8px; display: block; }
+    footer .gold-line { margin: 0 auto 26px; width: 60%; }
+    .contacts { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+    .contacts a {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 16px; border-radius: 999px;
+      border: 1px solid var(--gold-soft); color: var(--ink); text-decoration: none; font-size: .88rem;
+      background: rgba(255,255,255,.5);
+    }
+    .contacts svg { width: 18px; height: 18px; color: var(--rose-dark); }
+    .credits { font-size: .72rem; color: var(--ink-soft); margin-top: 18px; letter-spacing: .06em; }
+
+    /* Sticky bottom bar */
+    .bar {
+      position: fixed;
+      left: 0; right: 0; bottom: 0;
+      z-index: 20;
+      padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+      background: rgba(27, 21, 19, .94);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-top: 1px solid rgba(217,191,149,.3);
+    }
+    .bar-inner { max-width: 760px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .bar-summary { color: #fff; min-width: 0; }
+    .bar-summary small { display: block; font-size: .62rem; letter-spacing: .22em; text-transform: uppercase; color: var(--gold-soft); }
+    .bar-summary div { font-size: .9rem; font-weight: 300; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .bar-summary b { font-family: var(--serif); font-size: 1.2rem; font-weight: 600; margin-right: 6px; }
+    .btn-confirm {
+      flex-shrink: 0;
+      padding: 14px 22px;
+      border-radius: 999px;
+      border: 1px solid var(--gold-soft);
+      background: linear-gradient(180deg, #b67d72, #9a625b);
+      color: #fff;
+      font-size: .74rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      font-weight: 500;
+      cursor: pointer;
+      transition: opacity .2s, transform .2s;
+    }
+    .btn-confirm:hover { transform: translateY(-1px); }
+    .btn-confirm[aria-disabled="true"] { opacity: .5; }
+
+    /* Modal */
+    .modal {
+      position: fixed; inset: 0; z-index: 50;
+      display: none; align-items: flex-end; justify-content: center;
+      background: rgba(27, 21, 19, .55);
+      backdrop-filter: blur(4px);
+    }
+    .modal.open { display: flex; animation: fade .25s ease; }
+    .sheet {
+      width: 100%; max-width: 520px;
+      background: var(--nude-50);
+      border-radius: 28px 28px 0 0;
+      padding: 30px 24px calc(28px + env(safe-area-inset-bottom));
+      text-align: center;
+      animation: up .35s cubic-bezier(.2,.8,.2,1);
+      max-height: 92vh; overflow-y: auto;
+    }
+    @media (min-width: 600px) { .modal { align-items: center; } .sheet { border-radius: 28px; } }
+    .sheet .seal {
+      width: 74px; height: 74px; margin: 0 auto 12px; border-radius: 50%;
+      border: 1px solid var(--gold); display: flex; align-items: center; justify-content: center;
+      color: var(--rose); background: #fff;
+    }
+    .sheet .seal svg { width: 34px; height: 34px; }
+    .sheet h3 { font-family: var(--serif); font-style: italic; font-size: 2rem; font-weight: 600; color: var(--rose-dark); }
+    .sheet p { color: var(--ink-soft); font-weight: 300; margin-top: 4px; }
+    .receipt { margin: 20px 0; padding: 16px; border-radius: 18px; background: #fff; border: 1px dashed var(--gold-soft); text-align: left; }
+    .receipt div { display: flex; justify-content: space-between; gap: 12px; padding: 7px 0; font-size: .94rem; border-bottom: 1px solid var(--nude-100); }
+    .receipt div:last-child { border: 0; }
+    .receipt span { color: var(--ink-soft); }
+    .receipt b { font-weight: 500; text-align: right; }
+    .btn-wa {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      width: 100%; padding: 16px; border-radius: 999px; border: 0;
+      background: #1f7a4d; color: #fff; font-size: .82rem; letter-spacing: .16em; text-transform: uppercase; font-weight: 500;
+      text-decoration: none; cursor: pointer;
+    }
+    .btn-wa svg { width: 20px; height: 20px; }
+    .btn-ghost { margin-top: 10px; width: 100%; padding: 13px; border-radius: 999px; border: 1px solid var(--nude-300); background: transparent; color: var(--ink); cursor: pointer; font-size: .82rem; letter-spacing: .12em; text-transform: uppercase; }
+    .small-note { font-size: .78rem; color: var(--ink-soft); margin-top: 12px; font-weight: 300; }
+
+    .toast {
+      position: fixed; left: 50%; bottom: calc(100px + env(safe-area-inset-bottom)); z-index: 60;
+      transform: translate(-50%, 20px); opacity: 0; pointer-events: none;
+      background: var(--black); color: #fff; padding: 12px 20px; border-radius: 999px; font-size: .88rem;
+      transition: all .3s ease; box-shadow: var(--shadow); max-width: calc(100% - 32px); text-align: center;
+    }
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+    @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes up { from { transform: translateY(40px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+    .reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s ease, transform .7s ease; }
+    .reveal.in { opacity: 1; transform: none; }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1; transform: none; transition: none; }
+      html { scroll-behavior: auto; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Símbolos reutilizáveis -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="logo-ic" viewBox="0 0 120 100">
+      <text x="60" y="80" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-size="96" font-weight="500" fill="currentColor" letter-spacing="-22">IC</text>
+      <path d="M4 64 C 40 52, 80 50, 118 40" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-9.2-8.6C1.3 8.4 3 5 6.4 5c2 0 3.3 1.1 4 2.4h3.2C14.3 6.1 15.6 5 17.6 5 21 5 22.7 8.4 21.2 11.4 19 15.6 12 20 12 20z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></symbol>
+    <symbol id="i-wa" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3z"/></symbol>
+    <symbol id="i-ig" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="17.4" cy="6.6" r="1.1" fill="currentColor"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-6.5-6.2-6.5-11.2a6.5 6.5 0 0 1 13 0C18.5 14.8 12 21 12 21z" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="9.8" r="2.3" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+    <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3.5 9.5h17M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></symbol>
+    <symbol id="i-brow" viewBox="0 0 32 32"><path d="M4 18c5-6 14-8 24-5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M7 16.5l-1-2.5M10 15l-.6-2.6M13 14l-.3-2.6M16 13.4l0-2.6M19 13.3l.3-2.5M22 13.6l.6-2.4M25 14.2l.9-2.2" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/></symbol>
+    <symbol id="i-henna" viewBox="0 0 32 32"><path d="M4 15c5-6 14-8 24-5" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"/><path d="M16 19c-1.6 2.2-2.4 3.6-2.4 4.7a2.4 2.4 0 0 0 4.8 0c0-1.1-.8-2.5-2.4-4.7z" fill="currentColor" opacity=".6"/></symbol>
+    <symbol id="i-lami" viewBox="0 0 32 32"><path d="M4 19c5-6 14-8 24-5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M8 16.5l-.4-5M11 15.2l-.1-5.2M14 14.4l.1-5.3M17 14l.3-5.3M20 14l.5-5.2M23 14.4l.7-5" stroke="currentColor" stroke-width="1.1" stroke-linecap="round"/><path d="M26 4l.6 1.5L28 6l-1.4.5L26 8l-.6-1.5L24 6l1.4-.5z" fill="currentColor"/></symbol>
+    <symbol id="i-lash" viewBox="0 0 32 32"><path d="M4 14c4 5 20 5 24 0" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M7 16l-2 4M10.5 17.5l-1.2 4.4M14.2 18.2l-.4 4.6M17.8 18.2l.4 4.6M21.5 17.5l1.2 4.4M25 16l2 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><path d="M6 13c4-4 16-4 20 0" fill="none" stroke="currentColor" stroke-width="1" opacity=".5"/></symbol>
+    <symbol id="i-chev-l" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-chev-r" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  </svg>
+
+  <!-- ================= HERO ================= -->
+  <header class="hero">
+    <div class="mobile-brand">
+      <svg class="logo" viewBox="0 0 120 100" aria-hidden="true"><use href="#logo-ic"/></svg>
+      <div><b>Studio Iêda Carlos</b><i>Cílios e Sobrancelhas</i></div>
+    </div>
+
+    <div class="hero-text reveal">
+      <div class="logo-block">
+        <svg class="logo" viewBox="0 0 120 100" aria-hidden="true"><use href="#logo-ic"/></svg>
+        <div class="brand">Studio Iêda Carlos</div>
+        <div class="brand-sub">Cílios e Sobrancelhas</div>
+      </div>
+      <div class="gold-line first"></div>
+
+      <div class="hero-kicker">Agenda de</div>
+      <div class="hero-title" id="heroMonth">Dezembro</div>
+      <div class="hero-kicker">já está aberta!</div>
+
+      <div class="gold-line" style="width:180px;margin:20px auto 18px"></div>
+
+      <p class="hero-desc">Garanta seu horário em poucos toques e não deixe para a última hora.</p>
+
+      <a class="hero-cta" href="#agendar">
+        <svg width="16" height="16"><use href="#i-cal"/></svg>
+        Agende seu horário
+      </a>
+
+      <div class="hero-meta">
+        <span><svg><use href="#i-pin"/></svg> Jardim Vila Boa • Goiânia</span>
+        <span><svg><use href="#i-heart"/></svg> Atendimento exclusivo</span>
+      </div>
+    </div>
+
+    <div class="hero-photo">
+      <img src="img/ieda.jpg" alt="Iêda Carlos, especialista em cílios e sobrancelhas" fetchpriority="high" />
+      <div class="signature">
+        <strong>Iêda Carlos</strong>
+        <small>Lash &amp; Brow Designer</small>
+      </div>
+    </div>
+
+    <svg class="hero-arc top" viewBox="0 0 360 160" aria-hidden="true"><path d="M10 4 C 120 30, 250 70, 356 150" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>
+    <svg class="hero-arc bottom" viewBox="0 0 360 160" aria-hidden="true"><path d="M10 4 C 120 30, 250 70, 356 150" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>
+  </header>
+
+  <main>
+    <!-- ================= PASSO 1 ================= -->
+    <section class="section reveal" id="agendar">
+      <div class="section-head">
+        <div class="step-num">1</div>
+        <div class="eyebrow">Procedimento</div>
+        <h2>Escolha seu <em>atendimento</em></h2>
+        <p>Cada detalhe é pensado com muito carinho para você.</p>
+      </div>
+      <div class="panel">
+        <div class="services" id="services" role="radiogroup" aria-label="Procedimentos"></div>
+      </div>
+    </section>
+
+    <!-- ================= PASSO 2 ================= -->
+    <section class="section reveal" id="passo2">
+      <div class="section-head">
+        <div class="step-num">2</div>
+        <div class="eyebrow">Data e horário</div>
+        <h2>Quando fica <em>melhor</em> pra você?</h2>
+      </div>
+      <div class="panel">
+        <div class="month-label">
+          <h3 id="monthLabel"></h3>
+          <div class="nav-btns">
+            <button class="nav-btn" id="prevDays" type="button" aria-label="Dias anteriores"><svg><use href="#i-chev-l"/></svg></button>
+            <button class="nav-btn" id="nextDays" type="button" aria-label="Próximos dias"><svg><use href="#i-chev-r"/></svg></button>
+          </div>
+        </div>
+        <div class="days" id="days"></div>
+        <div class="slots-title">Horários disponíveis</div>
+        <div class="slots" id="slots"></div>
+      </div>
+    </section>
+
+    <!-- ================= PASSO 3 ================= -->
+    <section class="section reveal" id="passo3">
+      <div class="section-head">
+        <div class="step-num">3</div>
+        <div class="eyebrow">Seus dados</div>
+        <h2>Quase <em>lá</em></h2>
+        <p>A confirmação chega pelo WhatsApp.</p>
+      </div>
+      <div class="panel">
+        <div class="fields-2">
+          <div class="field">
+            <label for="clientName">Nome completo</label>
+            <input type="text" id="clientName" autocomplete="name" placeholder="Ex.: Mariana Souza" />
+          </div>
+          <div class="field">
+            <label for="clientPhone">WhatsApp</label>
+            <input type="tel" id="clientPhone" autocomplete="tel" inputmode="tel" placeholder="(62) 99999-9999" maxlength="15" />
+          </div>
+        </div>
+        <div class="field" style="margin-bottom:0">
+          <label for="clientNote">Observação <span style="text-transform:none;letter-spacing:0">(opcional)</span></label>
+          <textarea id="clientNote" placeholder="Ex.: primeira vez, alergia, manutenção…"></textarea>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= MEUS AGENDAMENTOS ================= -->
+    <section class="section" id="meusAgendamentos" hidden>
+      <div class="section-head">
+        <div class="eyebrow">Neste aparelho</div>
+        <h2>Meus <em>agendamentos</em></h2>
+      </div>
+      <div class="panel"><div class="bookings-list" id="bookingsList"></div></div>
+    </section>
+
+    <!-- ================= SOBRE ================= -->
+    <section class="section reveal">
+      <div class="panel">
+        <div class="about">
+          <div class="about-photo"><img src="img/avatar.jpg" alt="Iêda Carlos" loading="lazy" /></div>
+          <div>
+            <div class="eyebrow">Prazer, sou a Iêda</div>
+            <h3>Minha missão é <em>realçar</em> a beleza que existe em você</h3>
+            <p>Produtos de qualidade, materiais selecionados e técnicas que proporcionam segurança, cuidado e excelência em cada procedimento.</p>
+            <div class="quote">“Não apenas um procedimento, mas uma experiência de cuidado.”</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="gallery">
+        <figure>
+          <img src="img/olhar.jpg" alt="Resultado de design de sobrancelhas e cílios" loading="lazy" />
+          <figcaption>Resultado natural</figcaption>
+        </figure>
+        <div class="gallery-card">
+          <div>
+            <div class="eyebrow">O que faço</div>
+            <ul>
+              <li>Extensão de cílios</li>
+              <li>Design personalizado</li>
+              <li>Design com henna</li>
+              <li>Brow lamination</li>
+            </ul>
+          </div>
+          <a href="https://instagram.com/studioiedacarlos" target="_blank" rel="noopener">Ver resultados no Instagram →</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="gold-line"></div>
+    <svg class="logo" viewBox="0 0 120 100" aria-hidden="true" style="color:var(--gold)"><use href="#logo-ic"/></svg>
+    <div class="brand" style="font-size:.9rem">Studio Iêda Carlos</div>
+    <div class="brand-sub">Cílios e Sobrancelhas • Goiânia</div>
+    <div class="contacts">
+      <a href="https://wa.me/5562991005141" target="_blank" rel="noopener"><svg><use href="#i-wa"/></svg> 62 99100-5141</a>
+      <a href="https://instagram.com/studioiedacarlos" target="_blank" rel="noopener"><svg><use href="#i-ig"/></svg> @studioiedacarlos</a>
+    </div>
+    <div class="credits">Com carinho, Studio Iêda Carlos • desenvolvido por Wesley Martins</div>
+  </footer>
+
+  <!-- Barra fixa -->
+  <div class="bar">
+    <div class="bar-inner">
+      <div class="bar-summary">
+        <small id="barLabel">Seu agendamento</small>
+        <div id="barText"></div>
+      </div>
+      <button class="btn-confirm" id="confirmBtn" type="button">Confirmar</button>
+    </div>
+  </div>
+
+  <!-- Modal de confirmação -->
+  <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="sheet">
+      <div class="seal"><svg><use href="#i-heart"/></svg></div>
+      <h3 id="modalTitle">Horário reservado!</h3>
+      <p>Falta só um passo: envie a mensagem para a Iêda confirmar.</p>
+      <div class="receipt" id="receipt"></div>
+      <a class="btn-wa" id="waLink" href="#" target="_blank" rel="noopener"><svg><use href="#i-wa"/></svg> Confirmar no WhatsApp</a>
+      <button class="btn-ghost" id="closeModal" type="button">Fechar</button>
+      <div class="small-note">Seu horário fica guardado neste aparelho em “Meus agendamentos”.</div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    // ---------- Configuração do studio ----------
+    const STUDIO_WHATSAPP = '5562991005141';
+    const STORAGE_KEY = 'studio_ic_bookings';
+    const DAYS_AHEAD = 30;
+    const CLOSED_WEEKDAYS = [0];            // 0 = domingo
+    const SATURDAY_SLOTS = ['08:00', '09:30', '11:00', '13:30'];
+    const TIME_SLOTS = ['09:00', '10:30', '13:30', '15:00', '16:30', '18:00'];
+
+    const services = [
+      { id: 'design', name: 'Design Personalizado', duration: '40 min', price: 40, icon: 'i-brow' },
+      { id: 'henna', name: 'Design com Henna', duration: '50 min', price: 60, icon: 'i-henna' },
+      { id: 'lamination', name: 'Brow Lamination', duration: '60 min', price: 100, icon: 'i-lami' },
+      { id: 'cilios', name: 'Extensão de Cílios', duration: '90 min', price: 140, icon: 'i-lash' }
+    ];
+
+    // ---------- Estado ----------
+    let selectedService = services[0];
+    let selectedDate = null;
+    let selectedSlot = null;
+
+    const $ = (id) => document.getElementById(id);
+    const brl = (v) => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    const pad = (n) => String(n).padStart(2, '0');
+    const toISO = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+    const fromISO = (s) => { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); };
+    const fmtDate = (s) => fromISO(s).toLocaleDateString('pt-BR', { weekday: 'long', day: '2-digit', month: 'long' });
+    const fmtShort = (s) => s.split('-').reverse().join('/');
+
+    function loadBookings() {
+      try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch { return []; }
+    }
+    function saveBookings(list) {
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(list)); } catch { /* modo privado */ }
+    }
+
+    function toast(msg) {
+      const t = $('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      clearTimeout(toast._t);
+      toast._t = setTimeout(() => t.classList.remove('show'), 2600);
+    }
+
+    // ---------- Mês do hero ----------
+    (function setHeroMonth() {
+      const now = new Date();
+      // a partir do dia 20, divulga a agenda do mês seguinte
+      const target = now.getDate() >= 20 ? new Date(now.getFullYear(), now.getMonth() + 1, 1) : now;
+      const name = target.toLocaleDateString('pt-BR', { month: 'long' });
+      $('heroMonth').textContent = name.charAt(0).toUpperCase() + name.slice(1);
+    })();
+
+    // ---------- Serviços ----------
+    function renderServices() {
+      const wrap = $('services');
+      wrap.innerHTML = '';
+      services.forEach((srv) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'service' + (srv.id === selectedService.id ? ' selected' : '');
+        btn.setAttribute('role', 'radio');
+        btn.setAttribute('aria-checked', String(srv.id === selectedService.id));
+        btn.innerHTML = `
+          <div class="service-icon"><svg viewBox="0 0 32 32"><use href="#${srv.icon}"/></svg></div>
+          <div>
+            <div class="service-name">${srv.name}</div>
+            <div class="service-meta">Duração média: ${srv.duration}</div>
+          </div>
+          <div class="service-price">${brl(srv.price)}</div>`;
+        btn.addEventListener('click', () => {
+          selectedService = srv;
+          renderServices();
+          updateBar();
+        });
+        wrap.appendChild(btn);
+      });
+    }
+
+    // ---------- Dias ----------
+    function availableDays() {
+      const list = [];
+      const start = new Date();
+      start.setHours(0, 0, 0, 0);
+      for (let i = 0; i < DAYS_AHEAD; i++) {
+        const d = new Date(start);
+        d.setDate(start.getDate() + i);
+        list.push(d);
+      }
+      return list;
+    }
+
+    function slotsFor(dateStr) {
+      const d = fromISO(dateStr);
+      if (CLOSED_WEEKDAYS.includes(d.getDay())) return [];
+      return d.getDay() === 6 ? SATURDAY_SLOTS : TIME_SLOTS;
+    }
+
+    function isPast(dateStr, slot) {
+      const [h, m] = slot.split(':').map(Number);
+      const dt = fromISO(dateStr);
+      dt.setHours(h, m, 0, 0);
+      return dt.getTime() < Date.now() + 60 * 60 * 1000; // até 1h antes
+    }
+
+    function freeSlots(dateStr) {
+      const booked = loadBookings().filter((b) => b.date === dateStr).map((b) => b.time);
+      return slotsFor(dateStr).filter((s) => !booked.includes(s) && !isPast(dateStr, s));
+    }
+
+    function renderDays() {
+      const wrap = $('days');
+      wrap.innerHTML = '';
+      availableDays().forEach((d) => {
+        const iso = toISO(d);
+        const free = freeSlots(iso).length;
+        const closed = CLOSED_WEEKDAYS.includes(d.getDay());
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'day' + (iso === selectedDate ? ' selected' : '');
+        btn.disabled = closed || free === 0;
+        btn.innerHTML = `
+          <span>${d.toLocaleDateString('pt-BR', { weekday: 'short' }).replace('.', '')}</span>
+          <b>${d.getDate()}</b>
+          <i>${closed ? 'fechado' : free === 0 ? 'lotado' : free <= 2 ? 'últimos' : ''}</i>`;
+        btn.addEventListener('click', () => {
+          selectedDate = iso;
+          selectedSlot = null;
+          renderDays();
+          renderSlots();
+          updateBar();
+        });
+        wrap.appendChild(btn);
+      });
+      const ref = selectedDate ? fromISO(selectedDate) : new Date();
+      const label = ref.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
+      $('monthLabel').textContent = label.charAt(0).toUpperCase() + label.slice(1);
+    }
+
+    $('prevDays').addEventListener('click', () => $('days').scrollBy({ left: -280, behavior: 'smooth' }));
+    $('nextDays').addEventListener('click', () => $('days').scrollBy({ left: 280, behavior: 'smooth' }));
+
+    // ---------- Horários ----------
+    function renderSlots() {
+      const wrap = $('slots');
+      wrap.innerHTML = '';
+      if (!selectedDate) {
+        wrap.innerHTML = '<div class="empty-note">Escolha um dia acima para ver os horários.</div>';
+        return;
+      }
+      const booked = loadBookings().filter((b) => b.date === selectedDate).map((b) => b.time);
+      slotsFor(selectedDate).forEach((slot) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'slot' + (slot === selectedSlot ? ' selected' : '');
+        btn.textContent = slot;
+        btn.disabled = booked.includes(slot) || isPast(selectedDate, slot);
+        btn.addEventListener('click', () => {
+          selectedSlot = slot;
+          renderSlots();
+          updateBar();
+          setTimeout(() => $('passo3').scrollIntoView({ behavior: 'smooth', block: 'start' }), 250);
+        });
+        wrap.appendChild(btn);
+      });
+    }
+
+    // ---------- Barra inferior ----------
+    function updateBar() {
+      const ready = Boolean(selectedDate && selectedSlot);
+      $('barLabel').textContent = ready ? 'Pronto para confirmar' : selectedDate ? 'Escolha um horário' : 'Escolha a data';
+      const when = selectedDate ? ` • ${fmtShort(selectedDate)}${selectedSlot ? ' às ' + selectedSlot : ''}` : '';
+      const b = document.createElement('b');
+      b.textContent = brl(selectedService.price);
+      $('barText').replaceChildren(b, document.createTextNode(`${selectedService.name}${when}`));
+      $('confirmBtn').setAttribute('aria-disabled', String(!ready));
+    }
+
+    // ---------- Máscara do telefone ----------
+    $('clientPhone').addEventListener('input', (e) => {
+      const n = e.target.value.replace(/\D/g, '').slice(0, 11);
+      let out = n;
+      if (n.length > 2) out = `(${n.slice(0, 2)}) ${n.slice(2)}`;
+      if (n.length > 7) out = `(${n.slice(0, 2)}) ${n.slice(2, 7)}-${n.slice(7)}`;
+      e.target.value = out;
+    });
+
+    // ---------- Confirmar ----------
+    $('confirmBtn').addEventListener('click', () => {
+      if (!selectedDate || !selectedSlot) {
+        toast(selectedDate ? 'Escolha um horário disponível.' : 'Escolha o dia do atendimento.');
+        $('passo2').scrollIntoView({ behavior: 'smooth' });
+        return;
+      }
+
+      const name = $('clientName').value.trim();
+      const phone = $('clientPhone').value.trim();
+      const note = $('clientNote').value.trim();
+      if (name.length < 3) { toast('Informe seu nome completo.'); $('clientName').focus(); return; }
+      if (phone.replace(/\D/g, '').length < 10) { toast('Informe um WhatsApp válido.'); $('clientPhone').focus(); return; }
+
+      // revalida o horário (pode ter sido reservado em outra aba)
+      if (!freeSlots(selectedDate).includes(selectedSlot)) {
+        toast('Esse horário acabou de ser reservado. Escolha outro.');
+        selectedSlot = null; renderDays(); renderSlots(); updateBar();
+        return;
+      }
+
+      const booking = {
+        id: Date.now(),
+        service: selectedService.name,
+        price: selectedService.price,
+        date: selectedDate,
+        time: selectedSlot,
+        clientName: name,
+        clientPhone: phone,
+        note
+      };
+      const list = loadBookings();
+      list.push(booking);
+      saveBookings(list);
+
+      openModal(booking);
+
+      selectedSlot = null;
+      renderDays();
+      renderSlots();
+      updateBar();
+      renderMyBookings();
+    });
+
+    function waLink(text) {
+      return `https://wa.me/${STUDIO_WHATSAPP}?text=${encodeURIComponent(text)}`;
+    }
+
+    function waMessage(b) {
+      const lines = [
+        'Olá, Iêda! 💕 Gostaria de confirmar meu agendamento:',
+        '',
+        `✨ *${b.service}* (${brl(b.price)})`,
+        `📅 ${fmtDate(b.date)} às ${b.time}`,
+        `👤 ${b.clientName}`,
+        `📱 ${b.clientPhone}`
+      ];
+      if (b.note) lines.push(`📝 ${b.note}`);
+      return waLink(lines.join('\n'));
+    }
+
+    function openModal(b) {
+      const rows = [
+        ['Procedimento', b.service],
+        ['Data', fmtDate(b.date)],
+        ['Horário', b.time],
+        ['Cliente', b.clientName],
+        ['Valor', brl(b.price)]
+      ].map(([k, v]) => {
+        const row = document.createElement('div');
+        const s = document.createElement('span'); s.textContent = k;
+        const strong = document.createElement('b'); strong.textContent = v;
+        row.append(s, strong);
+        return row;
+      });
+      $('receipt').replaceChildren(...rows);
+      $('waLink').href = waMessage(b);
+      $('modal').classList.add('open');
+      $('waLink').focus();
+    }
+    function closeModal() { $('modal').classList.remove('open'); }
+    $('closeModal').addEventListener('click', closeModal);
+    $('modal').addEventListener('click', (e) => { if (e.target === $('modal')) closeModal(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+    // ---------- Meus agendamentos ----------
+    function renderMyBookings() {
+      const todayISO = toISO(new Date());
+      const mine = loadBookings()
+        .filter((b) => b.date >= todayISO)
+        .sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time));
+      $('meusAgendamentos').hidden = mine.length === 0;
+      const items = mine.map((b) => {
+        const row = document.createElement('div');
+        row.className = 'booking';
+        const info = document.createElement('div');
+        const title = document.createElement('b'); title.textContent = b.service;
+        const when = document.createElement('span'); when.textContent = `${fmtDate(b.date)} às ${b.time}`;
+        info.append(title, when);
+        const cancel = document.createElement('button');
+        cancel.type = 'button';
+        cancel.textContent = 'Cancelar';
+        cancel.addEventListener('click', () => {
+          if (!confirm('Cancelar este agendamento?')) return;
+          saveBookings(loadBookings().filter((x) => x.id !== b.id));
+          const msg = `Olá, Iêda! Preciso cancelar meu horário de ${b.service} em ${fmtShort(b.date)} às ${b.time}. — ${b.clientName}`;
+          window.open(waLink(msg), '_blank', 'noopener');
+          renderMyBookings(); renderDays(); renderSlots();
+          toast('Agendamento cancelado.');
+        });
+        row.append(info, cancel);
+        return row;
+      });
+      $('bookingsList').replaceChildren(...items);
+    }
+
+    // ---------- Animações de entrada ----------
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((en) => { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } });
+    }, { threshold: .12 });
+    document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+
+    // ---------- Início ----------
+    renderServices();
+    selectedDate = availableDays().map(toISO).find((iso) => freeSlots(iso).length > 0) || null;
+    renderDays();
+    renderSlots();
+    updateBar();
+    renderMyBookings();
+
+    // PWA: instalável como app no celular
+    if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+      navigator.serviceWorker.register('sw.js').catch(() => {});
+    }
+  </script>
+</body>
+</html>
