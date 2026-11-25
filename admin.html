@@ -43,6 +43,8 @@
     .login-card h1 { font-family: var(--serif); font-style: italic; font-weight: 600; font-size: 2rem; color: var(--rose-dark); margin: 6px 0 2px; }
     .login-card p { color: var(--ink-soft); font-weight: 300; font-size: .92rem; margin-bottom: 22px; }
     .login-card .field { text-align: left; }
+    .back-link { display: inline-block; margin-top: 14px; font-size: .82rem; color: var(--ink-soft); text-decoration: none; letter-spacing: .04em; }
+    .back-link:hover { color: var(--rose-dark); }
     .msg-error { color: var(--bad); font-size: .88rem; margin-top: 10px; min-height: 1.2em; }
 
     /* ---------- Campos e botões ---------- */
@@ -80,6 +82,12 @@
     .brand b { display: block; font-weight: 500; font-size: .7rem; letter-spacing: .24em; text-transform: uppercase; color: var(--gold-soft); }
     .brand i { font-family: var(--serif); font-style: italic; font-size: 1.15rem; }
     .topbar .btn { background: transparent; color: #fff; border-color: rgba(217,191,149,.4); }
+    @media (max-width: 480px) {
+      .brand .logo { width: 32px; height: 28px; }
+      .brand b { font-size: .58rem; letter-spacing: .14em; }
+      .brand i { font-size: 1rem; }
+      .topbar .btn { padding: 8px 12px; }
+    }
 
     .tabs { max-width: 960px; margin: 10px auto 0; display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; }
     .tabs::-webkit-scrollbar { display: none; }
@@ -204,6 +212,7 @@
       <div class="field"><label for="password">Senha</label><input id="password" type="password" autocomplete="current-password" required /></div>
       <button class="btn btn-primary btn-block" type="submit" id="loginBtn">Entrar</button>
       <div class="msg-error" id="loginError" role="alert"></div>
+      <a class="site-link back-link" href="index.html">← Voltar para o site</a>
     </form>
   </section>
 
@@ -215,7 +224,10 @@
           <svg class="logo" viewBox="0 0 120 100"><use href="#logo-ic"/></svg>
           <div><b>Studio Iêda Carlos</b><i>Painel da agenda</i></div>
         </div>
-        <button class="btn" id="logoutBtn" type="button">Sair</button>
+        <div style="display:flex;gap:8px">
+          <a class="btn site-link" href="index.html">← Site</a>
+          <button class="btn" id="logoutBtn" type="button">Sair</button>
+        </div>
       </div>
       <nav class="tabs" id="tabs">
         <button class="tab active" data-tab="agenda" type="button">Agenda</button>
@@ -323,6 +335,8 @@
     const db = (window.supabase && CFG.supabaseUrl && CFG.supabaseAnonKey)
       ? window.supabase.createClient(CFG.supabaseUrl, CFG.supabaseAnonKey)
       : null;
+
+    if (window.STUDIO_DEMO) document.querySelectorAll('.site-link').forEach((a) => (a.href = 'index.html?demo'));
 
     const WEEKDAYS = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
     const STATUS_LABEL = { pendente: 'Pendente', confirmado: 'Confirmado', concluido: 'Concluído', cancelado: 'Cancelado' };
