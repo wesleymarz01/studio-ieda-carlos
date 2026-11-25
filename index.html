@@ -783,6 +783,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
   <script src="config.js"></script>
+  <script>if (/[?&]demo\b/.test(location.search)) document.write('<script src="demo.js"><\/script>');</script>
   <script>
     // ---------- Banco (Supabase) — sem config.js preenchido, funciona em modo local ----------
     const CFG = window.STUDIO_CONFIG || {};
@@ -794,7 +795,7 @@
 
     // ---------- Configuração do studio ----------
     const STUDIO_WHATSAPP = '5562991005141';
-    const STORAGE_KEY = 'studio_ic_bookings';
+    const STORAGE_KEY = window.STUDIO_DEMO ? 'studio_ic_demo_mine' : 'studio_ic_bookings';
     const DAYS_AHEAD = 30;
     const CLOSED_WEEKDAYS = [0];            // 0 = domingo
     const SATURDAY_SLOTS = ['08:00', '09:30', '11:00', '13:30'];

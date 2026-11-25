@@ -189,6 +189,7 @@
       <div class="eyebrow">Configuração pendente</div>
       <h2 style="font-family:var(--serif);font-size:1.6rem;margin:6px 0 10px">Banco de dados ainda não conectado</h2>
       <p>Preencha <code>config.js</code> com a URL e a chave pública do Supabase e rode <code>supabase/schema.sql</code> no SQL Editor. Os passos estão em <code>SETUP.md</code>.</p>
+      <a class="btn btn-primary" href="admin.html?demo" style="margin-top:16px">Abrir demonstração</a>
     </div>
   </div>
 
@@ -316,6 +317,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
   <script src="config.js"></script>
+  <script>if (/[?&]demo\b/.test(location.search)) document.write('<script src="demo.js"><\/script>');</script>
   <script>
     const CFG = window.STUDIO_CONFIG || {};
     const db = (window.supabase && CFG.supabaseUrl && CFG.supabaseAnonKey)
