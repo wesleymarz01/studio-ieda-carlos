@@ -1,4 +1,4 @@
-const CACHE = 'studio-ic-v3';
+const CACHE = 'studio-ic-v4';
 const ASSETS = ['./', 'index.html', 'manifest.json', 'config.js', 'img/ieda.jpg', 'img/avatar.jpg', 'img/olhar.jpg', 'img/icon.svg', 'img/icon-192.png', 'img/icon-512.png'];
 
 self.addEventListener('install', (e) => {

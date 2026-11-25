@@ -476,6 +476,14 @@
       background: rgba(255,255,255,.5);
     }
     .contacts svg { width: 18px; height: 18px; color: var(--rose-dark); }
+    .admin-link {
+      display: inline-flex; align-items: center; gap: 8px; margin-top: 22px;
+      padding: 11px 20px; border-radius: 999px; background: var(--black); color: var(--gold-soft);
+      border: 1px solid rgba(217,191,149,.45); text-decoration: none;
+      font-size: .72rem; letter-spacing: .2em; text-transform: uppercase; font-weight: 500;
+    }
+    .admin-link svg { width: 15px; height: 15px; }
+    .admin-link:hover { color: #fff; }
     .credits { font-size: .72rem; color: var(--ink-soft); margin-top: 18px; letter-spacing: .06em; }
 
     /* Sticky bottom bar */
@@ -752,6 +760,10 @@
       <a href="https://wa.me/5562991005141" target="_blank" rel="noopener"><svg><use href="#i-wa"/></svg> 62 99100-5141</a>
       <a href="https://instagram.com/studioiedacarlos" target="_blank" rel="noopener"><svg><use href="#i-ig"/></svg> @studioiedacarlos</a>
     </div>
+    <a class="admin-link" id="adminLink" href="admin.html">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
+      Painel do Studio
+    </a>
     <div class="credits">Com carinho, Studio Iêda Carlos • desenvolvido por Wesley Martins</div>
   </footer>
 
@@ -796,6 +808,7 @@
     // ---------- Configuração do studio ----------
     const STUDIO_WHATSAPP = '5562991005141';
     const STORAGE_KEY = window.STUDIO_DEMO ? 'studio_ic_demo_mine' : 'studio_ic_bookings';
+    if (window.STUDIO_DEMO) document.getElementById('adminLink').href = 'admin.html?demo';
     const DAYS_AHEAD = 30;
     const CLOSED_WEEKDAYS = [0];            // 0 = domingo
     const SATURDAY_SLOTS = ['08:00', '09:30', '11:00', '13:30'];
