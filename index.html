@@ -781,7 +781,17 @@
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+  <script src="config.js"></script>
   <script>
+    // ---------- Banco (Supabase) — sem config.js preenchido, funciona em modo local ----------
+    const CFG = window.STUDIO_CONFIG || {};
+    const db = (window.supabase && CFG.supabaseUrl && CFG.supabaseAnonKey)
+      ? window.supabase.createClient(CFG.supabaseUrl, CFG.supabaseAnonKey)
+      : null;
+    let schedule = null;          // { weekday: ['09:00', ...] } vindo do banco
+    let busy = {};                // { 'YYYY-MM-DD': Set(['09:00' | '*']) } vindo do banco
+
     // ---------- Configuração do studio ----------
     const STUDIO_WHATSAPP = '5562991005141';
     const STORAGE_KEY = 'studio_ic_bookings';
@@ -790,7 +800,8 @@
     const SATURDAY_SLOTS = ['08:00', '09:30', '11:00', '13:30'];
     const TIME_SLOTS = ['09:00', '10:30', '13:30', '15:00', '16:30', '18:00'];
 
-    const services = [
+    const ICONS = { design: 'i-brow', henna: 'i-henna', lamination: 'i-lami', cilios: 'i-lash' };
+    let services = [
       { id: 'design', name: 'Design Personalizado', duration: '40 min', price: 40, icon: 'i-brow' },
       { id: 'henna', name: 'Design com Henna', duration: '50 min', price: 60, icon: 'i-henna' },
       { id: 'lamination', name: 'Brow Lamination', duration: '60 min', price: 100, icon: 'i-lami' },
@@ -875,8 +886,34 @@
 
     function slotsFor(dateStr) {
       const d = fromISO(dateStr);
+      if (schedule) return busy[dateStr]?.has('*') ? [] : (schedule[d.getDay()] || []);
       if (CLOSED_WEEKDAYS.includes(d.getDay())) return [];
       return d.getDay() === 6 ? SATURDAY_SLOTS : TIME_SLOTS;
+    }
+
+    function bookedTimes(dateStr) {
+      if (db) return [...(busy[dateStr] || [])];
+      return loadBookings().filter((b) => b.date === dateStr).map((b) => b.time);
+    }
+
+    async function loadRemote() {
+      const from = toISO(new Date());
+      const to = toISO(availableDays().at(-1));
+      const [srv, slots, bz] = await Promise.all([
+        db.from('services').select('*').eq('active', true).order('sort'),
+        db.from('weekday_slots').select('*'),
+        db.rpc('public_busy', { d_from: from, d_to: to })
+      ]);
+      if (srv.error || slots.error || bz.error) throw srv.error || slots.error || bz.error;
+      if (srv.data.length) {
+        services = srv.data.map((s) => ({
+          id: s.id, name: s.name, duration: `${s.duration_min} min`, price: Number(s.price), icon: ICONS[s.id] || 'i-brow'
+        }));
+        selectedService = services.find((s) => s.id === selectedService.id) || services[0];
+      }
+      schedule = Object.fromEntries(slots.data.map((r) => [r.weekday, r.slots]));
+      busy = {};
+      bz.data.forEach((r) => (busy[r.date] ||= new Set()).add(r.hour));
     }
 
     function isPast(dateStr, slot) {
@@ -887,7 +924,7 @@
     }
 
     function freeSlots(dateStr) {
-      const booked = loadBookings().filter((b) => b.date === dateStr).map((b) => b.time);
+      const booked = bookedTimes(dateStr);
       return slotsFor(dateStr).filter((s) => !booked.includes(s) && !isPast(dateStr, s));
     }
 
@@ -897,7 +934,7 @@
       availableDays().forEach((d) => {
         const iso = toISO(d);
         const free = freeSlots(iso).length;
-        const closed = CLOSED_WEEKDAYS.includes(d.getDay());
+        const closed = slotsFor(iso).length === 0;   // dia sem expediente ou folga
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'day' + (iso === selectedDate ? ' selected' : '');
@@ -931,7 +968,7 @@
         wrap.innerHTML = '<div class="empty-note">Escolha um dia acima para ver os horários.</div>';
         return;
       }
-      const booked = loadBookings().filter((b) => b.date === selectedDate).map((b) => b.time);
+      const booked = bookedTimes(selectedDate);
       slotsFor(selectedDate).forEach((slot) => {
         const btn = document.createElement('button');
         btn.type = 'button';
@@ -969,7 +1006,15 @@
     });
 
     // ---------- Confirmar ----------
-    $('confirmBtn').addEventListener('click', () => {
+    const DB_ERRORS = {
+      HORARIO_OCUPADO: 'Esse horário acabou de ser reservado. Escolha outro.',
+      HORARIO_INVALIDO: 'Esse horário não está mais disponível. Escolha outro.',
+      SERVICO_INVALIDO: 'Esse procedimento está indisponível no momento.',
+      LIMITE_TELEFONE: 'Esse WhatsApp já tem 3 horários marcados. Fale com a Iêda.'
+    };
+
+    $('confirmBtn').addEventListener('click', async () => {
+      if ($('confirmBtn').disabled) return;
       if (!selectedDate || !selectedSlot) {
         toast(selectedDate ? 'Escolha um horário disponível.' : 'Escolha o dia do atendimento.');
         $('passo2').scrollIntoView({ behavior: 'smooth' });
@@ -999,6 +1044,36 @@
         clientPhone: phone,
         note
       };
+
+      if (db) {
+        $('confirmBtn').disabled = true;
+        $('confirmBtn').textContent = 'Enviando…';
+        try {
+          const { data, error } = await db.rpc('create_booking', {
+            p_service: selectedService.id, p_date: selectedDate, p_time: selectedSlot,
+            p_name: name, p_phone: phone, p_note: note || null
+          });
+          if (error) {
+            const code = Object.keys(DB_ERRORS).find((k) => error.message?.includes(k));
+            toast(code ? DB_ERRORS[code] : 'Não foi possível agendar agora. Tente de novo.');
+            if (code === 'HORARIO_OCUPADO' || code === 'HORARIO_INVALIDO') {
+              selectedSlot = null;
+              await loadRemote().catch(() => {});
+              renderDays(); renderSlots(); updateBar();
+            }
+            return;
+          }
+          booking.remoteId = data;
+          (busy[booking.date] ||= new Set()).add(booking.time);
+        } catch {
+          toast('Sem conexão. Verifique a internet e tente de novo.');
+          return;
+        } finally {
+          $('confirmBtn').disabled = false;
+          $('confirmBtn').textContent = 'Confirmar';
+        }
+      }
+
       const list = loadBookings();
       list.push(booking);
       saveBookings(list);
@@ -1070,8 +1145,13 @@
         const cancel = document.createElement('button');
         cancel.type = 'button';
         cancel.textContent = 'Cancelar';
-        cancel.addEventListener('click', () => {
+        cancel.addEventListener('click', async () => {
           if (!confirm('Cancelar este agendamento?')) return;
+          if (db && b.remoteId) {
+            const { error } = await db.rpc('cancel_booking', { p_id: b.remoteId, p_phone: b.clientPhone });
+            if (error) { toast('Não foi possível cancelar agora. Tente de novo.'); return; }
+            busy[b.date]?.delete(b.time);
+          }
           saveBookings(loadBookings().filter((x) => x.id !== b.id));
           const msg = `Olá, Iêda! Preciso cancelar meu horário de ${b.service} em ${fmtShort(b.date)} às ${b.time}. — ${b.clientName}`;
           window.open(waLink(msg), '_blank', 'noopener');
@@ -1091,12 +1171,20 @@
     document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
 
     // ---------- Início ----------
-    renderServices();
-    selectedDate = availableDays().map(toISO).find((iso) => freeSlots(iso).length > 0) || null;
-    renderDays();
-    renderSlots();
-    updateBar();
-    renderMyBookings();
+    function boot() {
+      renderServices();
+      if (!selectedDate || !freeSlots(selectedDate).length) {
+        selectedDate = availableDays().map(toISO).find((iso) => freeSlots(iso).length > 0) || null;
+      }
+      renderDays();
+      renderSlots();
+      updateBar();
+      renderMyBookings();
+    }
+    boot();
+    if (db) {
+      loadRemote().then(boot).catch(() => toast('Não foi possível carregar a agenda. Verifique a internet.'));
+    }
 
     // PWA: instalável como app no celular
     if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {

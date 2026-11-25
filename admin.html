@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Painel — Studio Iêda Carlos</title>
+  <meta name="theme-color" content="#1b1513" />
+  <link rel="icon" href="img/icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="img/icon-192.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --nude-50: #fbf5f2; --nude-100: #f6ebe5; --nude-200: #eedcd3; --nude-300: #e2c7bb;
+      --rose: #a8706a; --rose-dark: #8a5651; --gold: #b8915c; --gold-soft: #d9bf95;
+      --ink: #2b211e; --ink-soft: #6f5c55; --black: #1b1513;
+      --ok: #2f7a52; --ok-bg: #e7f3ec; --warn: #9a6b1f; --warn-bg: #fbf0dc; --bad: #9b3b36; --bad-bg: #f8e4e2;
+      --shadow: 0 20px 50px -22px rgba(90, 55, 45, .3);
+      --serif: 'Cormorant Garamond', Georgia, serif;
+      --sans: 'Jost', system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    body {
+      font-family: var(--sans); color: var(--ink); background: var(--nude-100); min-height: 100vh; line-height: 1.5;
+      background-image: radial-gradient(ellipse 80% 50% at 100% 0%, #fdf1ec 0%, transparent 60%);
+      background-attachment: fixed;
+    }
+    button, input, select, textarea { font-family: inherit; font-size: 1rem; color: inherit; }
+    [hidden] { display: none !important; }
+
+    .logo { color: var(--gold); }
+    .eyebrow { font-size: .68rem; letter-spacing: .28em; text-transform: uppercase; color: var(--gold); font-weight: 500; }
+
+    /* ---------- Login ---------- */
+    .login { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px 16px; }
+    .login-card {
+      width: 100%; max-width: 380px; text-align: center; background: var(--nude-50);
+      border: 1px solid rgba(217,191,149,.5); border-radius: 26px; padding: 36px 26px; box-shadow: var(--shadow);
+    }
+    .login-card .logo { width: 80px; height: 66px; }
+    .login-card h1 { font-family: var(--serif); font-style: italic; font-weight: 600; font-size: 2rem; color: var(--rose-dark); margin: 6px 0 2px; }
+    .login-card p { color: var(--ink-soft); font-weight: 300; font-size: .92rem; margin-bottom: 22px; }
+    .login-card .field { text-align: left; }
+    .msg-error { color: var(--bad); font-size: .88rem; margin-top: 10px; min-height: 1.2em; }
+
+    /* ---------- Campos e botões ---------- */
+    .field { margin-bottom: 12px; }
+    .field label { display: block; font-size: .7rem; letter-spacing: .18em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 5px; }
+    .field input, .field select, .field textarea {
+      width: 100%; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--nude-300); background: #fff; outline: none;
+    }
+    .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--rose); box-shadow: 0 0 0 3px rgba(168,112,106,.14); }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    @media (max-width: 520px) { .grid-2 { grid-template-columns: 1fr; gap: 0; } }
+
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      padding: 10px 16px; border-radius: 999px; border: 1px solid var(--nude-300); background: #fff;
+      cursor: pointer; font-size: .82rem; font-weight: 500; text-decoration: none; color: var(--ink); white-space: nowrap;
+    }
+    .btn:disabled { opacity: .5; cursor: default; }
+    .btn-primary { background: linear-gradient(180deg, #b67d72, #9a625b); color: #fff; border-color: var(--gold-soft); letter-spacing: .12em; text-transform: uppercase; font-size: .76rem; padding: 13px 22px; }
+    .btn-block { width: 100%; }
+    .btn-ok { background: var(--ok); border-color: var(--ok); color: #fff; }
+    .btn-wa { background: #1f7a4d; border-color: #1f7a4d; color: #fff; }
+    .btn-ghost { background: transparent; }
+    .btn-danger { color: var(--bad); border-color: #e8c4c0; background: transparent; }
+    .btn svg { width: 16px; height: 16px; }
+
+    /* ---------- App ---------- */
+    .topbar {
+      position: sticky; top: 0; z-index: 10; background: rgba(27,21,19,.96); color: #fff;
+      backdrop-filter: blur(10px); padding: calc(10px + env(safe-area-inset-top)) 16px 10px;
+    }
+    .topbar-inner { max-width: 960px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .brand { display: flex; align-items: center; gap: 10px; }
+    .brand .logo { width: 40px; height: 34px; color: var(--gold-soft); }
+    .brand b { display: block; font-weight: 500; font-size: .7rem; letter-spacing: .24em; text-transform: uppercase; color: var(--gold-soft); }
+    .brand i { font-family: var(--serif); font-style: italic; font-size: 1.15rem; }
+    .topbar .btn { background: transparent; color: #fff; border-color: rgba(217,191,149,.4); }
+
+    .tabs { max-width: 960px; margin: 10px auto 0; display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; }
+    .tabs::-webkit-scrollbar { display: none; }
+    .tab {
+      flex-shrink: 0; padding: 8px 14px; border-radius: 999px; border: 1px solid transparent; background: transparent;
+      color: rgba(255,255,255,.7); cursor: pointer; font-size: .82rem; position: relative;
+    }
+    .tab.active { background: var(--nude-50); color: var(--ink); }
+    .tab .count {
+      display: inline-flex; min-width: 18px; height: 18px; padding: 0 5px; margin-left: 4px; border-radius: 999px;
+      background: var(--rose); color: #fff; font-size: .68rem; align-items: center; justify-content: center;
+    }
+
+    main { max-width: 960px; margin: 0 auto; padding: 18px 16px 60px; }
+
+    .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 18px; }
+    @media (max-width: 720px) { .kpis { grid-template-columns: repeat(2, 1fr); } }
+    .kpi { background: var(--nude-50); border: 1px solid rgba(217,191,149,.45); border-radius: 18px; padding: 14px 16px; }
+    .kpi span { display: block; font-size: .66rem; letter-spacing: .2em; text-transform: uppercase; color: var(--ink-soft); }
+    .kpi b { font-family: var(--serif); font-size: 1.9rem; font-weight: 600; line-height: 1.15; color: var(--ink); }
+    .kpi small { display: block; font-size: .78rem; color: var(--ink-soft); font-weight: 300; }
+    .kpi.dark { background: var(--black); border-color: var(--black); }
+    .kpi.dark span { color: var(--gold-soft); }
+    .kpi.dark b { color: #fff; }
+    .kpi.dark small { color: rgba(255,255,255,.6); }
+
+    .panel { background: var(--nude-50); border: 1px solid rgba(217,191,149,.45); border-radius: 22px; padding: 18px; box-shadow: var(--shadow); margin-bottom: 16px; }
+    .panel-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+    .panel-head h2 { font-family: var(--serif); font-weight: 600; font-size: 1.55rem; line-height: 1.1; }
+    .panel-head h2 em { color: var(--rose); }
+
+    .day-nav { display: flex; align-items: center; gap: 6px; }
+    .icon-btn { width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--nude-300); background: #fff; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
+    .icon-btn svg { width: 16px; height: 16px; }
+    .day-nav input { padding: 8px 10px; border-radius: 12px; border: 1px solid var(--nude-300); background: #fff; }
+
+    .list { display: grid; gap: 10px; }
+    .empty { text-align: center; padding: 26px 10px; color: var(--ink-soft); font-style: italic; font-weight: 300; }
+
+    .bk {
+      display: grid; grid-template-columns: 74px 1fr; gap: 14px; padding: 14px; border-radius: 18px; background: #fff;
+      border: 1px solid var(--nude-200); border-left: 4px solid var(--warn);
+    }
+    .bk.confirmado { border-left-color: var(--ok); }
+    .bk.concluido { border-left-color: var(--gold); opacity: .85; }
+    .bk.cancelado { border-left-color: var(--bad); opacity: .55; }
+    .bk-time { text-align: center; }
+    .bk-time b { display: block; font-family: var(--serif); font-size: 1.6rem; font-weight: 600; line-height: 1.1; }
+    .bk-time small { font-size: .72rem; color: var(--ink-soft); }
+    .bk-name { font-weight: 500; font-size: 1.05rem; }
+    .bk-meta { font-size: .86rem; color: var(--ink-soft); }
+    .bk-note { font-size: .84rem; margin-top: 6px; padding: 8px 10px; border-radius: 10px; background: var(--nude-100); color: var(--ink-soft); }
+    .bk-actions { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+    @media (max-width: 480px) {
+      .bk { grid-template-columns: 56px 1fr; gap: 10px; padding: 12px; }
+      .bk-time b { font-size: 1.35rem; }
+      .bk-actions .btn { padding: 8px 12px; font-size: .78rem; }
+    }
+    .pill { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; font-weight: 500; margin-left: 6px; vertical-align: middle; }
+    .pill.pendente { background: var(--warn-bg); color: var(--warn); }
+    .pill.confirmado { background: var(--ok-bg); color: var(--ok); }
+    .pill.concluido { background: #f3ead9; color: #7a5a2c; }
+    .pill.cancelado { background: var(--bad-bg); color: var(--bad); }
+    .pill.painel { background: var(--nude-200); color: var(--ink-soft); }
+
+    .row-item { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 14px; border-radius: 14px; background: #fff; border: 1px solid var(--nude-200); }
+    .row-item b { font-weight: 500; }
+    .row-item span { color: var(--ink-soft); font-size: .86rem; }
+
+    .srv { display: grid; grid-template-columns: 1.6fr .7fr .7fr auto auto; gap: 8px; align-items: end; padding: 12px; border-radius: 14px; background: #fff; border: 1px solid var(--nude-200); }
+    .srv .field { margin: 0; }
+    .srv .switch { display: flex; align-items: center; gap: 6px; font-size: .8rem; color: var(--ink-soft); padding-bottom: 12px; }
+    @media (max-width: 640px) { .srv { grid-template-columns: 1fr 1fr; } .srv .field:first-child { grid-column: 1 / -1; } }
+
+    .wk { display: grid; grid-template-columns: 110px 1fr; gap: 10px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--nude-200); }
+    .wk:last-of-type { border: 0; }
+    .wk label { font-weight: 500; }
+    .wk input { width: 100%; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--nude-300); background: #fff; }
+    .hint { font-size: .8rem; color: var(--ink-soft); font-weight: 300; margin-top: 8px; }
+
+    .toast {
+      position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom)); z-index: 60;
+      transform: translate(-50%, 20px); opacity: 0; pointer-events: none;
+      background: var(--black); color: #fff; padding: 12px 20px; border-radius: 999px; font-size: .88rem;
+      transition: all .3s ease; max-width: calc(100% - 32px); text-align: center;
+    }
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+    .setup { max-width: 560px; margin: 60px auto; padding: 0 16px; }
+    .setup code { background: var(--nude-200); padding: 1px 6px; border-radius: 6px; }
+  </style>
+</head>
+<body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="logo-ic" viewBox="0 0 120 100">
+      <text x="60" y="80" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-size="96" font-weight="500" fill="currentColor" letter-spacing="-22">IC</text>
+      <path d="M4 64 C 40 52, 80 50, 118 40" stroke="currentColor" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="i-wa" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3z"/></symbol>
+    <symbol id="i-chev-l" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-chev-r" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  </svg>
+
+  <!-- Sem banco configurado -->
+  <div class="setup" id="setupView" hidden>
+    <div class="panel">
+      <div class="eyebrow">Configuração pendente</div>
+      <h2 style="font-family:var(--serif);font-size:1.6rem;margin:6px 0 10px">Banco de dados ainda não conectado</h2>
+      <p>Preencha <code>config.js</code> com a URL e a chave pública do Supabase e rode <code>supabase/schema.sql</code> no SQL Editor. Os passos estão em <code>SETUP.md</code>.</p>
+    </div>
+  </div>
+
+  <!-- Login -->
+  <section class="login" id="loginView" hidden>
+    <form class="login-card" id="loginForm">
+      <svg class="logo" viewBox="0 0 120 100"><use href="#logo-ic"/></svg>
+      <div class="eyebrow">Studio Iêda Carlos</div>
+      <h1>Painel</h1>
+      <p>Entre para ver e organizar sua agenda.</p>
+      <div class="field"><label for="email">E-mail</label><input id="email" type="email" autocomplete="username" required /></div>
+      <div class="field"><label for="password">Senha</label><input id="password" type="password" autocomplete="current-password" required /></div>
+      <button class="btn btn-primary btn-block" type="submit" id="loginBtn">Entrar</button>
+      <div class="msg-error" id="loginError" role="alert"></div>
+    </form>
+  </section>
+
+  <!-- App -->
+  <div id="appView" hidden>
+    <header class="topbar">
+      <div class="topbar-inner">
+        <div class="brand">
+          <svg class="logo" viewBox="0 0 120 100"><use href="#logo-ic"/></svg>
+          <div><b>Studio Iêda Carlos</b><i>Painel da agenda</i></div>
+        </div>
+        <button class="btn" id="logoutBtn" type="button">Sair</button>
+      </div>
+      <nav class="tabs" id="tabs">
+        <button class="tab active" data-tab="agenda" type="button">Agenda</button>
+        <button class="tab" data-tab="pendentes" type="button">Pendentes <span class="count" id="pendCount" hidden>0</span></button>
+        <button class="tab" data-tab="novo" type="button">+ Novo</button>
+        <button class="tab" data-tab="bloqueios" type="button">Bloqueios</button>
+        <button class="tab" data-tab="servicos" type="button">Serviços</button>
+        <button class="tab" data-tab="horarios" type="button">Horários</button>
+      </nav>
+    </header>
+
+    <main>
+      <div class="kpis">
+        <div class="kpi dark"><span>Hoje</span><b id="kToday">0</b><small id="kTodayNext">—</small></div>
+        <div class="kpi"><span>Pendentes</span><b id="kPend">0</b><small>aguardando confirmação</small></div>
+        <div class="kpi"><span>Mês · realizado</span><b id="kDone">R$ 0</b><small id="kDoneN">0 atendimentos</small></div>
+        <div class="kpi"><span>Mês · previsto</span><b id="kPlan">R$ 0</b><small id="kPlanN">0 agendados</small></div>
+      </div>
+
+      <!-- Agenda do dia -->
+      <section class="panel" data-view="agenda">
+        <div class="panel-head">
+          <h2 id="dayTitle">Hoje</h2>
+          <div class="day-nav">
+            <button class="icon-btn" id="dayPrev" type="button" aria-label="Dia anterior"><svg><use href="#i-chev-l"/></svg></button>
+            <input type="date" id="dayPick" aria-label="Escolher dia" />
+            <button class="icon-btn" id="dayNext" type="button" aria-label="Próximo dia"><svg><use href="#i-chev-r"/></svg></button>
+            <button class="btn" id="dayToday" type="button">Hoje</button>
+          </div>
+        </div>
+        <div class="list" id="dayList"></div>
+      </section>
+
+      <!-- Pendentes -->
+      <section class="panel" data-view="pendentes" hidden>
+        <div class="panel-head"><h2>Aguardando <em>confirmação</em></h2></div>
+        <div class="list" id="pendList"></div>
+      </section>
+
+      <!-- Novo agendamento -->
+      <section class="panel" data-view="novo" hidden>
+        <div class="panel-head"><h2>Novo <em>agendamento</em></h2></div>
+        <form id="newForm">
+          <div class="grid-2">
+            <div class="field"><label for="nService">Procedimento</label><select id="nService" required></select></div>
+            <div class="field"><label for="nDate">Data</label><input type="date" id="nDate" required /></div>
+          </div>
+          <div class="grid-2">
+            <div class="field"><label for="nTime">Horário</label><select id="nTime" required></select></div>
+            <div class="field" id="nTimeOtherWrap" hidden><label for="nTimeOther">Outro horário</label><input type="time" id="nTimeOther" /></div>
+          </div>
+          <div class="grid-2">
+            <div class="field"><label for="nName">Nome da cliente</label><input id="nName" required minlength="2" maxlength="80" /></div>
+            <div class="field"><label for="nPhone">WhatsApp</label><input id="nPhone" type="tel" inputmode="tel" required placeholder="(62) 99999-9999" maxlength="15" /></div>
+          </div>
+          <div class="field"><label for="nNote">Observação</label><textarea id="nNote" rows="2" maxlength="300"></textarea></div>
+          <div class="field" style="display:flex;align-items:center;gap:8px"><input type="checkbox" id="nConfirmed" checked style="width:auto" /><label for="nConfirmed" style="margin:0;text-transform:none;letter-spacing:0;font-size:.92rem">Já confirmado</label></div>
+          <button class="btn btn-primary" type="submit" id="newBtn">Salvar agendamento</button>
+        </form>
+      </section>
+
+      <!-- Bloqueios -->
+      <section class="panel" data-view="bloqueios" hidden>
+        <div class="panel-head"><h2>Folgas e <em>bloqueios</em></h2></div>
+        <form id="blockForm">
+          <div class="grid-2">
+            <div class="field"><label for="bDate">Data</label><input type="date" id="bDate" required /></div>
+            <div class="field"><label for="bTime">Horário</label><select id="bTime"></select></div>
+          </div>
+          <div class="field"><label for="bReason">Motivo (só você vê)</label><input id="bReason" maxlength="120" placeholder="Ex.: folga, curso, consulta" /></div>
+          <button class="btn btn-primary" type="submit">Bloquear</button>
+        </form>
+        <div class="list" id="blockList" style="margin-top:16px"></div>
+      </section>
+
+      <!-- Serviços -->
+      <section class="panel" data-view="servicos" hidden>
+        <div class="panel-head">
+          <h2>Serviços e <em>preços</em></h2>
+          <button class="btn" id="addService" type="button">+ Novo serviço</button>
+        </div>
+        <div class="list" id="srvList"></div>
+        <p class="hint">Serviços desativados somem do site, mas continuam nos agendamentos antigos.</p>
+      </section>
+
+      <!-- Horários -->
+      <section class="panel" data-view="horarios" hidden>
+        <div class="panel-head"><h2>Horários de <em>atendimento</em></h2></div>
+        <form id="slotsForm">
+          <div id="wkList"></div>
+          <p class="hint">Separe os horários por vírgula, ex.: 09:00, 10:30, 13:30. Deixe vazio para dia fechado.</p>
+          <button class="btn btn-primary" type="submit" style="margin-top:12px">Salvar horários</button>
+        </form>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+  <script src="config.js"></script>
+  <script>
+    const CFG = window.STUDIO_CONFIG || {};
+    const db = (window.supabase && CFG.supabaseUrl && CFG.supabaseAnonKey)
+      ? window.supabase.createClient(CFG.supabaseUrl, CFG.supabaseAnonKey)
+      : null;
+
+    const WEEKDAYS = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+    const STATUS_LABEL = { pendente: 'Pendente', confirmado: 'Confirmado', concluido: 'Concluído', cancelado: 'Cancelado' };
+
+    const $ = (id) => document.getElementById(id);
+    const pad = (n) => String(n).padStart(2, '0');
+    const toISO = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+    const fromISO = (s) => { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); };
+    const addDays = (iso, n) => { const d = fromISO(iso); d.setDate(d.getDate() + n); return toISO(d); };
+    const brl = (v) => Number(v).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    const fmtLong = (iso) => fromISO(iso).toLocaleDateString('pt-BR', { weekday: 'long', day: '2-digit', month: 'long' });
+    const fmtShort = (iso) => iso.split('-').reverse().join('/');
+    const today = () => toISO(new Date());
+    const digits = (s) => (s || '').replace(/\D/g, '');
+    const waTo = (phone, text) => {
+      let n = digits(phone);
+      if (n.length <= 11) n = '55' + n;
+      return `https://wa.me/${n}?text=${encodeURIComponent(text)}`;
+    };
+
+    // pequeno construtor de elementos (evita innerHTML com dados da cliente)
+    function el(tag, props = {}, ...children) {
+      const e = document.createElement(tag);
+      Object.entries(props).forEach(([k, v]) => {
+        if (k === 'class') e.className = v;
+        else if (k.startsWith('on')) e.addEventListener(k.slice(2), v);
+        else if (v !== undefined && v !== null && v !== false) e.setAttribute(k, v === true ? '' : v);
+      });
+      children.flat().forEach((c) => c != null && e.append(c instanceof Node ? c : document.createTextNode(c)));
+      return e;
+    }
+
+    function toast(msg) {
+      const t = $('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      clearTimeout(toast._t);
+      toast._t = setTimeout(() => t.classList.remove('show'), 2800);
+    }
+
+    function fail(error, fallback = 'Algo deu errado. Tente de novo.') {
+      console.error(error);
+      const dup = error?.code === '23505' || /duplicate|unique/i.test(error?.message || '');
+      toast(dup ? 'Já existe um agendamento nesse dia e horário.' : fallback);
+    }
+
+    // ---------- Estado ----------
+    let services = [];
+    let schedule = {};
+    let currentDay = today();
+
+    // ---------- Autenticação ----------
+    function show(view) {
+      ['setupView', 'loginView', 'appView'].forEach((v) => ($(v).hidden = v !== view));
+    }
+
+    async function checkAdmin() {
+      const { data, error } = await db.rpc('is_admin');
+      return !error && data === true;
+    }
+
+    $('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      $('loginError').textContent = '';
+      $('loginBtn').disabled = true;
+      const { error } = await db.auth.signInWithPassword({ email: $('email').value.trim(), password: $('password').value });
+      $('loginBtn').disabled = false;
+      if (error) { $('loginError').textContent = 'E-mail ou senha incorretos.'; return; }
+      if (!(await checkAdmin())) {
+        await db.auth.signOut();
+        $('loginError').textContent = 'Este usuário não tem acesso ao painel.';
+        return;
+      }
+      startApp();
+    });
+
+    $('logoutBtn').addEventListener('click', async () => {
+      await db.auth.signOut();
+      show('loginView');
+    });
+
+    // ---------- Abas ----------
+    $('tabs').addEventListener('click', (e) => {
+      const btn = e.target.closest('.tab');
+      if (!btn) return;
+      document.querySelectorAll('.tab').forEach((t) => t.classList.toggle('active', t === btn));
+      document.querySelectorAll('[data-view]').forEach((v) => (v.hidden = v.dataset.view !== btn.dataset.tab));
+      const loaders = { pendentes: loadPending, novo: refreshNewTimes, bloqueios: loadBlocks, servicos: renderServices, horarios: renderSchedule };
+      loaders[btn.dataset.tab]?.();
+    });
+
+    // ---------- Dados base ----------
+    async function loadBase() {
+      const [srv, sl] = await Promise.all([
+        db.from('services').select('*').order('sort'),
+        db.from('weekday_slots').select('*')
+      ]);
+      if (srv.error || sl.error) throw srv.error || sl.error;
+      services = srv.data;
+      schedule = Object.fromEntries(sl.data.map((r) => [r.weekday, r.slots]));
+      $('nService').replaceChildren(...services.filter((s) => s.active).map((s) => el('option', { value: s.id }, `${s.name} — ${brl(s.price)}`)));
+    }
+
+    // ---------- Indicadores ----------
+    async function loadKpis() {
+      const t = today();
+      const first = t.slice(0, 8) + '01';
+      const d = fromISO(first); d.setMonth(d.getMonth() + 1); d.setDate(0);
+      const last = toISO(d);
+      const [month, pend] = await Promise.all([
+        db.from('bookings').select('date,hour,price,status,client_name').gte('date', first).lte('date', last),
+        db.from('bookings').select('id').eq('status', 'pendente').gte('date', t)
+      ]);
+      if (month.error || pend.error) return;
+      const rows = month.data.filter((b) => b.status !== 'cancelado');
+      const done = rows.filter((b) => b.status === 'concluido');
+      const sum = (arr) => arr.reduce((a, b) => a + Number(b.price), 0);
+      const todays = rows.filter((b) => b.date === t).sort((a, b) => a.hour.localeCompare(b.hour));
+      const now = `${pad(new Date().getHours())}:${pad(new Date().getMinutes())}`;
+      const next = todays.find((b) => b.hour >= now && b.status !== 'concluido');
+      $('kToday').textContent = todays.length;
+      $('kTodayNext').textContent = next ? `próxima: ${next.hour} · ${next.client_name.split(' ')[0]}` : (todays.length ? 'dia encerrado' : 'sem horários');
+      $('kPend').textContent = pend.data.length;
+      $('pendCount').hidden = pend.data.length === 0;
+      $('pendCount').textContent = pend.data.length;
+      $('kDone').textContent = brl(sum(done));
+      $('kDoneN').textContent = `${done.length} atendimento${done.length === 1 ? '' : 's'}`;
+      $('kPlan').textContent = brl(sum(rows));
+      $('kPlanN').textContent = `${rows.length} agendado${rows.length === 1 ? '' : 's'}`;
+    }
+
+    // ---------- Cartão de agendamento ----------
+    async function setStatus(b, status) {
+      const { error } = await db.from('bookings').update({ status }).eq('id', b.id);
+      if (error) { fail(error); return false; }
+      return true;
+    }
+
+    function bookingCard(b, { showDate = false } = {}) {
+      const actions = [];
+      const first = b.client_name.split(' ')[0];
+
+      if (b.status === 'pendente') {
+        actions.push(el('button', {
+          class: 'btn btn-ok', type: 'button',
+          onclick: async () => {
+            const msg = `Olá, ${first}! 💕 Seu horário de *${b.service_name}* está confirmado para ${fmtLong(b.date)} às ${b.hour}.\n\nTe espero! — Studio Iêda Carlos`;
+            window.open(waTo(b.client_phone, msg), '_blank', 'noopener');
+            if (await setStatus(b, 'confirmado')) { toast('Confirmado!'); refreshAll(); }
+          }
+        }, 'Confirmar + avisar'));
+      }
+      if (b.status === 'pendente' || b.status === 'confirmado') {
+        actions.push(el('button', {
+          class: 'btn', type: 'button',
+          onclick: async () => { if (await setStatus(b, 'concluido')) { toast('Atendimento concluído.'); refreshAll(); } }
+        }, 'Concluído'));
+        actions.push(el('button', {
+          class: 'btn btn-danger', type: 'button',
+          onclick: async () => {
+            if (!confirm(`Cancelar o horário de ${b.client_name} (${fmtShort(b.date)} às ${b.hour})?`)) return;
+            const avisar = confirm('Avisar a cliente no WhatsApp?');
+            if (avisar) {
+              const msg = `Olá, ${first}! Precisei cancelar seu horário de ${b.service_name} em ${fmtShort(b.date)} às ${b.hour}. Me chama aqui para remarcarmos 💕 — Studio Iêda Carlos`;
+              window.open(waTo(b.client_phone, msg), '_blank', 'noopener');
+            }
+            if (await setStatus(b, 'cancelado')) { toast('Agendamento cancelado.'); refreshAll(); }
+          }
+        }, 'Cancelar'));
+      }
+      if (b.status === 'concluido' || b.status === 'cancelado') {
+        actions.push(el('button', {
+          class: 'btn btn-ghost', type: 'button',
+          onclick: async () => { if (await setStatus(b, 'confirmado')) { toast('Status desfeito.'); refreshAll(); } }
+        }, 'Desfazer'));
+      }
+      const wa = el('a', { class: 'btn btn-wa', href: waTo(b.client_phone, `Olá, ${first}! `), target: '_blank', rel: 'noopener' });
+      wa.innerHTML = '<svg><use href="#i-wa"/></svg>WhatsApp';   // conteúdo fixo, sem dados da cliente
+      actions.push(wa);
+
+      return el('article', { class: `bk ${b.status}` },
+        el('div', { class: 'bk-time' }, el('b', {}, b.hour), showDate ? el('small', {}, fmtShort(b.date)) : null),
+        el('div', {},
+          el('div', { class: 'bk-name' }, b.client_name,
+            el('span', { class: `pill ${b.status}` }, STATUS_LABEL[b.status]),
+            b.source === 'painel' ? el('span', { class: 'pill painel' }, 'pelo painel') : null),
+          el('div', { class: 'bk-meta' }, `${b.service_name} · ${brl(b.price)} · ${b.client_phone}`),
+          b.note ? el('div', { class: 'bk-note' }, b.note) : null,
+          el('div', { class: 'bk-actions' }, actions)
+        )
+      );
+    }
+
+    // ---------- Agenda do dia ----------
+    async function loadDay() {
+      $('dayPick').value = currentDay;
+      const t = today();
+      $('dayTitle').textContent = currentDay === t ? 'Hoje' : currentDay === addDays(t, 1) ? 'Amanhã' : fmtLong(currentDay);
+      const { data, error } = await db.from('bookings').select('*').eq('date', currentDay).order('hour');
+      if (error) { fail(error, 'Não foi possível carregar a agenda.'); return; }
+      const active = data.filter((b) => b.status !== 'cancelado');
+      const cancelled = data.filter((b) => b.status === 'cancelado');
+      const wd = fromISO(currentDay).getDay();
+      const closed = !(schedule[wd] || []).length;
+      $('dayList').replaceChildren(
+        ...(active.length ? active.map((b) => bookingCard(b)) : [el('div', { class: 'empty' }, closed ? 'Dia fechado — sem atendimentos.' : 'Nenhum agendamento neste dia.')]),
+        ...cancelled.map((b) => bookingCard(b))
+      );
+    }
+    $('dayPrev').addEventListener('click', () => { currentDay = addDays(currentDay, -1); loadDay(); });
+    $('dayNext').addEventListener('click', () => { currentDay = addDays(currentDay, 1); loadDay(); });
+    $('dayToday').addEventListener('click', () => { currentDay = today(); loadDay(); });
+    $('dayPick').addEventListener('change', (e) => { if (e.target.value) { currentDay = e.target.value; loadDay(); } });
+
+    // ---------- Pendentes ----------
+    async function loadPending() {
+      const { data, error } = await db.from('bookings').select('*').eq('status', 'pendente').gte('date', today()).order('date').order('hour');
+      if (error) { fail(error); return; }
+      $('pendList').replaceChildren(...(data.length ? data.map((b) => bookingCard(b, { showDate: true })) : [el('div', { class: 'empty' }, 'Tudo confirmado por aqui 💕')]));
+    }
+
+    // ---------- Novo agendamento ----------
+    async function refreshNewTimes() {
+      const date = $('nDate').value;
+      const opts = [];
+      if (date) {
+        const [bk, bl] = await Promise.all([
+          db.from('bookings').select('hour,status').eq('date', date),
+          db.from('blocks').select('hour').eq('date', date)
+        ]);
+        const taken = new Set([...(bk.data || []).filter((b) => b.status !== 'cancelado').map((b) => b.hour), ...(bl.data || []).map((b) => b.hour || '*')]);
+        (schedule[fromISO(date).getDay()] || []).forEach((h) => {
+          const busy = taken.has(h) || taken.has('*');
+          opts.push(el('option', { value: h, disabled: busy }, busy ? `${h} — ocupado` : h));
+        });
+        if (taken.has('*')) opts.unshift(el('option', { value: '', disabled: true }, 'Dia bloqueado'));
+      }
+      opts.push(el('option', { value: 'outro' }, 'Outro horário…'));
+      $('nTime').replaceChildren(...opts);
+      const firstFree = [...$('nTime').options].find((o) => !o.disabled);
+      if (firstFree) $('nTime').value = firstFree.value;
+      $('nTimeOtherWrap').hidden = $('nTime').value !== 'outro';
+    }
+    $('nDate').addEventListener('change', refreshNewTimes);
+    $('nTime').addEventListener('change', () => { $('nTimeOtherWrap').hidden = $('nTime').value !== 'outro'; });
+
+    function phoneMask(e) {
+      const n = digits(e.target.value).slice(0, 11);
+      let out = n;
+      if (n.length > 2) out = `(${n.slice(0, 2)}) ${n.slice(2)}`;
+      if (n.length > 7) out = `(${n.slice(0, 2)}) ${n.slice(2, 7)}-${n.slice(7)}`;
+      e.target.value = out;
+    }
+    $('nPhone').addEventListener('input', phoneMask);
+
+    $('newForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const hour = $('nTime').value === 'outro' ? $('nTimeOther').value : $('nTime').value;
+      if (!/^\d{2}:\d{2}$/.test(hour)) { toast('Escolha um horário.'); return; }
+      if (digits($('nPhone').value).length < 10) { toast('WhatsApp inválido.'); return; }
+      const srv = services.find((s) => s.id === $('nService').value);
+      $('newBtn').disabled = true;
+      const { error } = await db.from('bookings').insert({
+        service_id: srv.id, service_name: srv.name, price: srv.price,
+        date: $('nDate').value, hour,
+        client_name: $('nName').value.trim(), client_phone: $('nPhone').value.trim(),
+        note: $('nNote').value.trim() || null,
+        status: $('nConfirmed').checked ? 'confirmado' : 'pendente', source: 'painel'
+      });
+      $('newBtn').disabled = false;
+      if (error) { fail(error); return; }
+      toast('Agendamento salvo!');
+      currentDay = $('nDate').value;
+      ['nName', 'nPhone', 'nNote'].forEach((id) => ($(id).value = ''));
+      refreshNewTimes();
+      refreshAll();
+    });
+
+    // ---------- Bloqueios ----------
+    function refreshBlockTimes() {
+      const date = $('bDate').value;
+      const slots = date ? (schedule[fromISO(date).getDay()] || []) : [];
+      $('bTime').replaceChildren(el('option', { value: '' }, 'Dia inteiro'), ...slots.map((h) => el('option', { value: h }, h)));
+    }
+    $('bDate').addEventListener('change', refreshBlockTimes);
+
+    async function loadBlocks() {
+      refreshBlockTimes();
+      const { data, error } = await db.from('blocks').select('*').gte('date', today()).order('date').order('hour');
+      if (error) { fail(error); return; }
+      $('blockList').replaceChildren(...(data.length ? data.map((k) => el('div', { class: 'row-item' },
+        el('div', {}, el('b', {}, `${fmtLong(k.date)} · ${k.hour || 'dia inteiro'}`), k.reason ? el('div', {}, el('span', {}, k.reason)) : null),
+        el('button', {
+          class: 'btn btn-danger', type: 'button',
+          onclick: async () => {
+            const { error } = await db.from('blocks').delete().eq('id', k.id);
+            if (error) { fail(error); return; }
+            toast('Bloqueio removido.'); loadBlocks();
+          }
+        }, 'Remover'))) : [el('div', { class: 'empty' }, 'Nenhum bloqueio futuro.')]));
+    }
+
+    $('blockForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const date = $('bDate').value;
+      const hour = $('bTime').value || null;
+      const { data: clash } = await db.from('bookings').select('hour,client_name,status').eq('date', date);
+      const affected = (clash || []).filter((b) => b.status !== 'cancelado' && (!hour || b.hour === hour));
+      if (affected.length && !confirm(`Já existe(m) ${affected.length} agendamento(s) nesse período (${affected.map((b) => `${b.hour} ${b.client_name}`).join(', ')}). Bloquear mesmo assim? Os agendamentos não são cancelados automaticamente.`)) return;
+      const { error } = await db.from('blocks').insert({ date, hour, reason: $('bReason').value.trim() || null });
+      if (error) { fail(error); return; }
+      toast('Bloqueado!');
+      $('bReason').value = '';
+      loadBlocks();
+      refreshAll();
+    });
+
+    // ---------- Serviços ----------
+    function renderServices() {
+      $('srvList').replaceChildren(...services.map((s) => {
+        const name = el('input', { value: s.name, maxlength: 60 });
+        const dur = el('input', { type: 'number', min: 5, max: 480, step: 5, value: s.duration_min });
+        const price = el('input', { type: 'number', min: 0, step: '0.01', value: Number(s.price) });
+        const active = el('input', { type: 'checkbox' });
+        active.checked = s.active;
+        return el('div', { class: 'srv' },
+          el('div', { class: 'field' }, el('label', {}, 'Nome'), name),
+          el('div', { class: 'field' }, el('label', {}, 'Minutos'), dur),
+          el('div', { class: 'field' }, el('label', {}, 'Preço (R$)'), price),
+          el('label', { class: 'switch' }, active, 'Ativo'),
+          el('button', {
+            class: 'btn', type: 'button', style: 'margin-bottom:4px',
+            onclick: async () => {
+              const { error } = await db.from('services').update({
+                name: name.value.trim(), duration_min: Number(dur.value), price: Number(price.value), active: active.checked
+              }).eq('id', s.id);
+              if (error) { fail(error, 'Confira os valores e tente de novo.'); return; }
+              toast('Serviço salvo!');
+              await loadBase(); renderServices();
+            }
+          }, 'Salvar'));
+      }));
+    }
+
+    $('addService').addEventListener('click', async () => {
+      const name = prompt('Nome do novo serviço:');
+      if (!name || name.trim().length < 2) return;
+      const id = name.trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+      const sort = Math.max(0, ...services.map((s) => s.sort)) + 1;
+      const { error } = await db.from('services').insert({ id, name: name.trim(), duration_min: 60, price: 0, sort });
+      if (error) { fail(error, 'Já existe um serviço com esse nome.'); return; }
+      toast('Serviço criado — ajuste o preço e salve.');
+      await loadBase(); renderServices();
+    });
+
+    // ---------- Horários ----------
+    function renderSchedule() {
+      $('wkList').replaceChildren(...[1, 2, 3, 4, 5, 6, 0].map((wd) => el('div', { class: 'wk' },
+        el('label', { for: `wk${wd}` }, WEEKDAYS[wd]),
+        el('input', { id: `wk${wd}`, value: (schedule[wd] || []).join(', '), placeholder: 'fechado' }))));
+    }
+
+    $('slotsForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const rows = [];
+      for (let wd = 0; wd < 7; wd++) {
+        const raw = $(`wk${wd}`).value.split(/[,;\s]+/).map((s) => s.trim()).filter(Boolean);
+        const bad = raw.find((h) => !/^([01]\d|2[0-3]):[0-5]\d$/.test(h));
+        if (bad) { toast(`Horário inválido em ${WEEKDAYS[wd]}: "${bad}". Use o formato 09:00.`); return; }
+        rows.push({ weekday: wd, slots: [...new Set(raw)].sort() });
+      }
+      const { error } = await db.from('weekday_slots').upsert(rows);
+      if (error) { fail(error); return; }
+      toast('Horários salvos!');
+      await loadBase(); renderSchedule();
+    });
+
+    // ---------- Ciclo ----------
+    function refreshAll() {
+      loadKpis();
+      loadDay();
+      if (!document.querySelector('[data-view="pendentes"]').hidden) loadPending();
+    }
+
+    let started = false;
+    async function startApp() {
+      show('appView');
+      try { await loadBase(); } catch (e) { fail(e, 'Não foi possível carregar os dados.'); return; }
+      $('nDate').value = today();
+      $('bDate').value = today();
+      refreshAll();
+      if (!started) {
+        started = true;
+        setInterval(() => { if (!document.hidden) refreshAll(); }, 60000);
+        document.addEventListener('visibilitychange', () => { if (!document.hidden) refreshAll(); });
+      }
+    }
+
+    (async () => {
+      if (!db) { show('setupView'); return; }
+      const { data } = await db.auth.getSession();
+      if (data.session && (await checkAdmin())) startApp();
+      else show('loginView');
+    })();
+  </script>
+</body>
+</html>

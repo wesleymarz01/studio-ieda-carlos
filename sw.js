@@ -1,5 +1,5 @@
-const CACHE = 'studio-ic-v1';
-const ASSETS = ['./', 'index.html', 'manifest.json', 'img/ieda.jpg', 'img/avatar.jpg', 'img/olhar.jpg', 'img/icon.svg', 'img/icon-192.png', 'img/icon-512.png'];
+const CACHE = 'studio-ic-v2';
+const ASSETS = ['./', 'index.html', 'manifest.json', 'config.js', 'img/ieda.jpg', 'img/avatar.jpg', 'img/olhar.jpg', 'img/icon.svg', 'img/icon-192.png', 'img/icon-512.png'];
 
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(ASSETS)).then(() => self.skipWaiting()));
